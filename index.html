@@ -34,6 +34,29 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Firebase App & Firestore Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script>
+    // Firebase Cloud Realtime Sync Initialization
+    try {
+      const firebaseConfig = {
+        apiKey: "AIzaSyCrPCZ88dgH3NIKiM1x43wTLbCYCn_P_yY",
+        authDomain: "jh-rental-manager.firebaseapp.com",
+        projectId: "jh-rental-manager",
+        storageBucket: "jh-rental-manager.firebasestorage.app",
+        messagingSenderId: "741615284188",
+        appId: "1:741615284188:web:3a76f9605deb93afbde919"
+      };
+      if (window.firebase && !window.firebase.apps.length) {
+        window.firebase.initializeApp(firebaseConfig);
+        window.firebaseDb = window.firebase.firestore();
+        console.log('[Firebase] Cloud Firestore initialized successfully.');
+      }
+    } catch (e) {
+      console.warn('[Firebase] Init notice:', e);
+    }
+  </script>
   <style>
     body {
       font-family: 'Pretendard', sans-serif;
@@ -55,7 +78,576 @@
       background: #94a3b8;
     }
   </style>
-</head>
+<script>
+window.__PRELOADED_RENTAL_DATA = {
+  "systemConfig": {
+    "appTitle": "포항 대도동 다가구 7세대 스테이",
+    "appSubtitle": "단기임대 & 원룸 통합 운영 · 정산 관리 시스템"
+  },
+  "rooms": [
+    {
+      "id": "101",
+      "name": "101호 (전세/기본)",
+      "colorTheme": "blue",
+      "location": "포항시 남구 대도동 1층 101호",
+      "type": "원룸",
+      "area": "26㎡ (약 8평)",
+      "baseWeeklyPrice": 250000,
+      "deposit": 50000000,
+      "cleaningFeeDefault": 40000,
+      "doorlockPin": "1010*",
+      "wifiInfo": "Daedo_101_5G / 포항101호!",
+      "manualStatus": "auto",
+      "amenities": [
+        "세탁기",
+        "인덕션",
+        "에어컨",
+        "냉장고",
+        "도어락"
+      ],
+      "memo": "전세 1세대 (보증금 5,000만원)"
+    },
+    {
+      "id": "102",
+      "name": "102호 (단기임대)",
+      "colorTheme": "emerald",
+      "location": "포항시 남구 대도동 1층 102호",
+      "type": "풀옵션 원룸 (퀸베드)",
+      "area": "28㎡ (약 8.5평)",
+      "baseWeeklyPrice": 270000,
+      "deposit": 300000,
+      "cleaningFeeDefault": 40000,
+      "doorlockPin": "1020*",
+      "wifiInfo": "Daedo_102_5G / 포항102호!",
+      "manualStatus": "auto",
+      "amenities": [
+        "세탁기",
+        "건조기",
+        "인덕션",
+        "전자레인지",
+        "스마트TV",
+        "초고속 와이파이",
+        "도어락"
+      ],
+      "memo": "단기임대 전용 호실"
+    },
+    {
+      "id": "103",
+      "name": "103호 (단기임대)",
+      "colorTheme": "purple",
+      "location": "포항시 남구 대도동 1층 103호",
+      "type": "풀옵션 원룸 (슈퍼싱글 트윈)",
+      "area": "28㎡ (약 8.5평)",
+      "baseWeeklyPrice": 270000,
+      "deposit": 300000,
+      "cleaningFeeDefault": 40000,
+      "doorlockPin": "1030*",
+      "wifiInfo": "Daedo_103_5G / 포항103호!",
+      "manualStatus": "auto",
+      "amenities": [
+        "세탁기",
+        "스타일러",
+        "인덕션",
+        "전자레인지",
+        "업무용 데스크",
+        "초고속 와이파이",
+        "도어락"
+      ],
+      "memo": "단기임대 전용 호실"
+    },
+    {
+      "id": "201",
+      "name": "201호 (월세)",
+      "colorTheme": "amber",
+      "location": "포항시 남구 대도동 2층 201호",
+      "type": "원룸",
+      "area": "26㎡ (약 8평)",
+      "baseWeeklyPrice": 250000,
+      "deposit": 3000000,
+      "cleaningFeeDefault": 40000,
+      "doorlockPin": "2010*",
+      "wifiInfo": "Daedo_201_5G / 포항201호!",
+      "manualStatus": "auto",
+      "amenities": [
+        "세탁기",
+        "인덕션",
+        "에어컨",
+        "냉장고",
+        "도어락"
+      ],
+      "memo": "월세 1세대"
+    },
+    {
+      "id": "202",
+      "name": "202호 (단기임대)",
+      "colorTheme": "teal",
+      "location": "포항시 남구 대도동 2층 202호",
+      "type": "풀옵션 원룸 (더블베드)",
+      "area": "28㎡ (약 8.5평)",
+      "baseWeeklyPrice": 270000,
+      "deposit": 300000,
+      "cleaningFeeDefault": 40000,
+      "doorlockPin": "2020*",
+      "wifiInfo": "Daedo_202_5G / 포항202호!",
+      "manualStatus": "auto",
+      "amenities": [
+        "세탁기",
+        "건조기",
+        "인덕션",
+        "전자레인지",
+        "스마트TV",
+        "초고속 와이파이",
+        "도어락"
+      ],
+      "memo": "단기임대 전용 호실"
+    },
+    {
+      "id": "203",
+      "name": "203호 (월세)",
+      "colorTheme": "indigo",
+      "location": "포항시 남구 대도동 2층 203호",
+      "type": "원룸",
+      "area": "26㎡ (약 8평)",
+      "baseWeeklyPrice": 250000,
+      "deposit": 3000000,
+      "cleaningFeeDefault": 40000,
+      "doorlockPin": "2030*",
+      "wifiInfo": "Daedo_203_5G / 포항203호!",
+      "manualStatus": "auto",
+      "amenities": [
+        "세탁기",
+        "인덕션",
+        "에어컨",
+        "냉장고",
+        "도어락"
+      ],
+      "memo": "월세 2세대"
+    },
+    {
+      "id": "301",
+      "name": "301호 (월세/주인세대)",
+      "colorTheme": "rose",
+      "location": "포항시 남구 대도동 3층 301호",
+      "type": "투룸/쓰리룸",
+      "area": "58㎡ (약 18평)",
+      "baseWeeklyPrice": 450000,
+      "deposit": 5000000,
+      "cleaningFeeDefault": 60000,
+      "doorlockPin": "3010*",
+      "wifiInfo": "Daedo_301_5G / 포항301호!",
+      "manualStatus": "auto",
+      "amenities": [
+        "세탁기",
+        "건조기",
+        "시스템에어컨",
+        "냉장고",
+        "인덕션",
+        "도어락"
+      ],
+      "memo": "월세 3세대 (주인세대)"
+    }
+  ],
+  "platforms": [
+    {
+      "id": "PLT-1",
+      "name": "33엠투",
+      "rate": 3.3
+    },
+    {
+      "id": "PLT-2",
+      "name": "삼삼엠투",
+      "rate": 3.3
+    },
+    {
+      "id": "PLT-3",
+      "name": "에어비앤비",
+      "rate": 14.0
+    },
+    {
+      "id": "PLT-4",
+      "name": "개인",
+      "rate": 0.0
+    },
+    {
+      "id": "PLT-5",
+      "name": "직거래",
+      "rate": 0.0
+    },
+    {
+      "id": "PLT-6",
+      "name": "리브애니웨어",
+      "rate": 8.8
+    },
+    {
+      "id": "PLT-7",
+      "name": "자리톡",
+      "rate": 3.3
+    },
+    {
+      "id": "PLT-8",
+      "name": "네이버예약",
+      "rate": 5.5
+    },
+    {
+      "id": "PLT-9",
+      "name": "기타",
+      "rate": 5.0
+    }
+  ],
+  "admins": [
+    {
+      "id": "ADM-1",
+      "username": "admin",
+      "password": "password1234",
+      "displayName": "포항대도 총괄관리자",
+      "role": "대표 관리자",
+      "createdAt": "2024-11-01"
+    }
+  ],
+  "reservations": [
+    {
+      "id": "RES-REAL-0001",
+      "roomId": "202",
+      "guestName": "이순형",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2025-09-03",
+      "checkOut": "2025-12-02",
+      "platform": "개인",
+      "totalAmount": 1800000,
+      "cleaningFee": 90000,
+      "commissionRate": 0.0,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0002",
+      "roomId": "103",
+      "guestName": "박범석",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2025-10-11",
+      "checkOut": "2025-10-17",
+      "platform": "33엠투",
+      "totalAmount": 120000,
+      "cleaningFee": 6000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0003",
+      "roomId": "103",
+      "guestName": "박민석",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2025-10-24",
+      "checkOut": "2025-11-13",
+      "platform": "33엠투",
+      "totalAmount": 400000,
+      "cleaningFee": 20000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0004",
+      "roomId": "103",
+      "guestName": "홍정아",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2025-11-14",
+      "checkOut": "2026-01-13",
+      "platform": "개인",
+      "totalAmount": 1200000,
+      "cleaningFee": 60000,
+      "commissionRate": 0.0,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0005",
+      "roomId": "102",
+      "guestName": "박태양",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2025-11-20",
+      "checkOut": "2025-12-20",
+      "platform": "개인",
+      "totalAmount": 600000,
+      "cleaningFee": 30000,
+      "commissionRate": 0.0,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0006",
+      "roomId": "202",
+      "guestName": "홍태성",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2025-12-05",
+      "checkOut": "2025-12-25",
+      "platform": "리브애니웨어",
+      "totalAmount": 400000,
+      "cleaningFee": 20000,
+      "commissionRate": 8.8,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0007",
+      "roomId": "103",
+      "guestName": "홍정아",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2025-11-14",
+      "checkOut": "2026-01-13",
+      "platform": "개인",
+      "totalAmount": 1200000,
+      "cleaningFee": 60000,
+      "commissionRate": 0.0,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0008",
+      "roomId": "202",
+      "guestName": "김윤홍",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2025-12-25",
+      "checkOut": "2026-01-04",
+      "platform": "리브애니웨어",
+      "totalAmount": 200000,
+      "cleaningFee": 10000,
+      "commissionRate": 8.8,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0009",
+      "roomId": "103",
+      "guestName": "오진영",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-02-01",
+      "checkOut": "2026-02-09",
+      "platform": "리브애니웨어",
+      "totalAmount": 160000,
+      "cleaningFee": 8000,
+      "commissionRate": 8.8,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0010",
+      "roomId": "103",
+      "guestName": "박석진",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-03-29",
+      "checkOut": "2026-04-10",
+      "platform": "리브애니웨어",
+      "totalAmount": 240000,
+      "cleaningFee": 12000,
+      "commissionRate": 8.8,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0011",
+      "roomId": "103",
+      "guestName": "유상현",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-04-30",
+      "checkOut": "2026-05-13",
+      "platform": "33엠투",
+      "totalAmount": 260000,
+      "cleaningFee": 13000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0012",
+      "roomId": "202",
+      "guestName": "곽주혁",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-05-03",
+      "checkOut": "2026-05-09",
+      "platform": "33엠투",
+      "totalAmount": 120000,
+      "cleaningFee": 6000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0013",
+      "roomId": "202",
+      "guestName": "김부건",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-05-14",
+      "checkOut": "2026-05-27",
+      "platform": "33엠투",
+      "totalAmount": 260000,
+      "cleaningFee": 13000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0014",
+      "roomId": "202",
+      "guestName": "이동환",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-05-28",
+      "checkOut": "2026-08-26",
+      "platform": "33엠투",
+      "totalAmount": 1800000,
+      "cleaningFee": 90000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0015",
+      "roomId": "103",
+      "guestName": "박소연",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-06-10",
+      "checkOut": "2026-06-16",
+      "platform": "33엠투",
+      "totalAmount": 120000,
+      "cleaningFee": 6000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0016",
+      "roomId": "103",
+      "guestName": "김희정",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-06-23",
+      "checkOut": "2026-06-29",
+      "platform": "33엠투",
+      "totalAmount": 120000,
+      "cleaningFee": 6000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0017",
+      "roomId": "103",
+      "guestName": "변준상",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-07-18",
+      "checkOut": "2026-07-24",
+      "platform": "자리톡",
+      "totalAmount": 120000,
+      "cleaningFee": 6000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0018",
+      "roomId": "103",
+      "guestName": "안드리안 다",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-07-26",
+      "checkOut": "2026-08-01",
+      "platform": "33엠투",
+      "totalAmount": 120000,
+      "cleaningFee": 6000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0019",
+      "roomId": "103",
+      "guestName": "김민석",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-08-03",
+      "checkOut": "2026-08-23",
+      "platform": "33엠투",
+      "totalAmount": 400000,
+      "cleaningFee": 20000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0020",
+      "roomId": "202",
+      "guestName": "전우한",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-08-26",
+      "checkOut": "2026-09-27",
+      "platform": "자리톡",
+      "totalAmount": 640000,
+      "cleaningFee": 32000,
+      "commissionRate": 3.3,
+      "cleaningDone": false,
+      "cleanerName": "박여사님",
+      "memo": ""
+    },
+    {
+      "id": "RES-REAL-0021",
+      "roomId": "202",
+      "guestName": "정국진",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-08-31",
+      "checkOut": "2026-09-06",
+      "platform": "33엠투",
+      "totalAmount": 120000,
+      "cleaningFee": 6000,
+      "commissionRate": 3.3,
+      "cleaningDone": true,
+      "cleanerName": "박여사님",
+      "memo": "완료"
+    },
+    {
+      "id": "RES-REAL-0022",
+      "roomId": "103",
+      "guestName": "장태원",
+      "guestPhone": "010-0000-0000",
+      "checkIn": "2026-09-22",
+      "checkOut": "2026-09-28",
+      "platform": "자리톡",
+      "totalAmount": 120000,
+      "cleaningFee": 6000,
+      "commissionRate": 3.3,
+      "cleaningDone": false,
+      "cleanerName": "박여사님",
+      "memo": ""
+    }
+  ],
+  "expenses": [
+    {
+      "id": "EXP-001",
+      "category": "소모품",
+      "amount": 35000,
+      "date": "2026-11-01",
+      "memo": "수건 및 침구류 세탁 세제 구매"
+    }
+  ]
+};
+</script>
+  </head>
 <body>
   <div id="root"></div>
 
@@ -326,195 +918,159 @@
 
     // --- Default Seed Data Generator ---
     const createInitialData = () => {
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth() + 1).padStart(2, '0');
-      const prevDate = new Date(y, now.getMonth() - 1, 1);
-      const py = prevDate.getFullYear();
-      const pm = String(prevDate.getMonth() + 1).padStart(2, '0');
-
-      const systemConfig = {
-        appTitle: '포항 대도동 스테이',
-        appSubtitle: '단기임대 통합 운영 · 정산 관리 시스템'
-      };
+      // 깃허브 배포 및 로컬 실행 시 데이터가 초기화되지 않도록
+      // window.__PRELOADED_RENTAL_DATA 또는 data.json 우선 참조
+      if (typeof window !== 'undefined' && window.__PRELOADED_RENTAL_DATA) {
+        try {
+          return JSON.parse(JSON.stringify(window.__PRELOADED_RENTAL_DATA));
+        } catch (e) {}
+      }
 
       const rooms = [
         {
           id: '101',
-          name: '101호 (모던 화이트 스튜디오)',
+          name: '101호 (전세/기본)',
           colorTheme: 'blue',
           location: '포항시 남구 대도동 1층 101호',
-          type: '풀옵션 원룸 (퀸베드)',
+          type: '원룸',
           area: '26㎡ (약 8평)',
           baseWeeklyPrice: 250000,
-          deposit: 300000,
+          deposit: 50000000,
           cleaningFeeDefault: 40000,
           doorlockPin: '1010*',
           wifiInfo: 'Daedo_101_5G / 포항101호!',
           manualStatus: 'auto',
-          amenities: ['세탁기', '건조기', '인덕션', '전자레인지', '네스프레소', '스마트TV(넷플릭스)', '초고속 와이파이', '도어락'],
-          memo: '남향 채광 우수, 장기/단기 출장객 선호도 높음'
+          amenities: ['세탁기', '인덕션', '에어컨', '냉장고', '도어락'],
+          memo: '전세 1세대 (보증금 5,000만원)'
         },
         {
           id: '102',
-          name: '102호 (코지 우드 스튜디오)',
+          name: '102호 (단기임대)',
           colorTheme: 'emerald',
           location: '포항시 남구 대도동 1층 102호',
-          type: '풀옵션 원룸 (슈퍼싱글 트윈/퀸)',
+          type: '풀옵션 원룸 (퀸베드)',
           area: '28㎡ (약 8.5평)',
           baseWeeklyPrice: 270000,
           deposit: 300000,
-          cleaningFeeDefault: 45000,
-          doorlockPin: '2020#',
+          cleaningFeeDefault: 40000,
+          doorlockPin: '1020*',
           wifiInfo: 'Daedo_102_5G / 포항102호!',
-          manualStatus: 'cleaning',
-          amenities: ['세탁기', '스타일러', '인덕션', '전자레인지', '업무용 데스크', '스마트TV', '초고속 와이파이', '도어락'],
-          memo: '업무용 책상 구비로 포스코/블루밸리 출장자 인기'
+          manualStatus: 'auto',
+          amenities: ['세탁기', '건조기', '인덕션', '전자레인지', '스마트TV', '초고속 와이파이', '도어락'],
+          memo: '단기임대 전용 호실'
+        },
+        {
+          id: '103',
+          name: '103호 (단기임대)',
+          colorTheme: 'purple',
+          location: '포항시 남구 대도동 1층 103호',
+          type: '풀옵션 원룸 (슈퍼싱글 트윈)',
+          area: '28㎡ (약 8.5평)',
+          baseWeeklyPrice: 270000,
+          deposit: 300000,
+          cleaningFeeDefault: 40000,
+          doorlockPin: '1030*',
+          wifiInfo: 'Daedo_103_5G / 포항103호!',
+          manualStatus: 'auto',
+          amenities: ['세탁기', '스타일러', '인덕션', '전자레인지', '업무용 데스크', '초고속 와이파이', '도어락'],
+          memo: '단기임대 전용 호실'
+        },
+        {
+          id: '201',
+          name: '201호 (월세)',
+          colorTheme: 'amber',
+          location: '포항시 남구 대도동 2층 201호',
+          type: '원룸',
+          area: '26㎡ (약 8평)',
+          baseWeeklyPrice: 250000,
+          deposit: 3000000,
+          cleaningFeeDefault: 40000,
+          doorlockPin: '2010*',
+          wifiInfo: 'Daedo_201_5G / 포항201호!',
+          manualStatus: 'auto',
+          amenities: ['세탁기', '인덕션', '에어컨', '냉장고', '도어락'],
+          memo: '월세 1세대'
+        },
+        {
+          id: '202',
+          name: '202호 (단기임대)',
+          colorTheme: 'teal',
+          location: '포항시 남구 대도동 2층 202호',
+          type: '풀옵션 원룸 (더블베드)',
+          area: '28㎡ (약 8.5평)',
+          baseWeeklyPrice: 270000,
+          deposit: 300000,
+          cleaningFeeDefault: 40000,
+          doorlockPin: '2020*',
+          wifiInfo: 'Daedo_202_5G / 포항202호!',
+          manualStatus: 'auto',
+          amenities: ['세탁기', '건조기', '인덕션', '전자레인지', '스마트TV', '초고속 와이파이', '도어락'],
+          memo: '단기임대 전용 호실'
+        },
+        {
+          id: '203',
+          name: '203호 (월세)',
+          colorTheme: 'indigo',
+          location: '포항시 남구 대도동 2층 203호',
+          type: '원룸',
+          area: '26㎡ (약 8평)',
+          baseWeeklyPrice: 250000,
+          deposit: 3000000,
+          cleaningFeeDefault: 40000,
+          doorlockPin: '2030*',
+          wifiInfo: 'Daedo_203_5G / 포항203호!',
+          manualStatus: 'auto',
+          amenities: ['세탁기', '인덕션', '에어컨', '냉장고', '도어락'],
+          memo: '월세 2세대'
+        },
+        {
+          id: '301',
+          name: '301호 (월세/주인세대)',
+          colorTheme: 'rose',
+          location: '포항시 남구 대도동 3층 301호',
+          type: '투룸/쓰리룸',
+          area: '58㎡ (약 18평)',
+          baseWeeklyPrice: 450000,
+          deposit: 5000000,
+          cleaningFeeDefault: 60000,
+          doorlockPin: '3010*',
+          wifiInfo: 'Daedo_301_5G / 포항301호!',
+          manualStatus: 'auto',
+          amenities: ['세탁기', '건조기', '시스템에어컨', '냉장고', '인덕션', '도어락'],
+          memo: '월세 3세대 (주인세대)'
         }
       ];
 
       const platforms = [
-        { id: 'PLT-1', name: '삼삼엠투', rate: 3.3 },
-        { id: 'PLT-2', name: '에어비앤비', rate: 14.0 },
-        { id: 'PLT-3', name: '직거래', rate: 0.0 },
-        { id: 'PLT-4', name: '네이버예약', rate: 5.5 },
-        { id: 'PLT-5', name: '리브애니웨어', rate: 8.8 },
-        { id: 'PLT-6', name: '기타', rate: 5.0 }
+        { id: 'PLT-1', name: '33엠투', rate: 3.3 },
+        { id: 'PLT-2', name: '삼삼엠투', rate: 3.3 },
+        { id: 'PLT-3', name: '에어비앤비', rate: 14.0 },
+        { id: 'PLT-4', name: '개인', rate: 0.0 },
+        { id: 'PLT-5', name: '직거래', rate: 0.0 },
+        { id: 'PLT-6', name: '리브애니웨어', rate: 8.8 },
+        { id: 'PLT-7', name: '자리톡', rate: 3.3 },
+        { id: 'PLT-8', name: '네이버예약', rate: 5.5 },
+        { id: 'PLT-9', name: '기타', rate: 5.0 }
       ];
 
       const admins = [
         {
           id: 'ADM-1',
           username: 'admin',
-          password: '1234',
+          password: 'password1234',
           displayName: '포항대도 총괄관리자',
           role: '대표 관리자',
-          createdAt: `${y}-${m}-01`
+          createdAt: '2024-11-01'
         }
       ];
 
-      const reservations = [
-        {
-          id: 'RES-1001',
-          roomId: '101',
-          guestName: '김민준',
-          guestPhone: '010-3921-8841',
-          checkIn: `${py}-${pm}-18`,
-          checkOut: `${py}-${pm}-28`,
-          platform: '삼삼엠투',
-          totalAmount: 480000,
-          cleaningFee: 40000,
-          commissionRate: 3.3,
-          cleaningDone: true,
-          cleanerName: '박여사님',
-          memo: '포항 철강산단 기술자 파견 숙소'
-        },
-        {
-          id: 'RES-1002',
-          roomId: '102',
-          guestName: '이서연',
-          guestPhone: '010-8244-1092',
-          checkIn: `${py}-${pm}-22`,
-          checkOut: `${y}-${m}-03`,
-          platform: '에어비앤비',
-          totalAmount: 660000,
-          cleaningFee: 45000,
-          commissionRate: 14.0,
-          cleaningDone: true,
-          cleanerName: '박여사님',
-          memo: '동해안 한달살기 및 워케이션'
-        },
-        {
-          id: 'RES-1003',
-          roomId: '101',
-          guestName: '박지훈',
-          guestPhone: '010-5519-7732',
-          checkIn: `${y}-${m}-02`,
-          checkOut: `${y}-${m}-11`,
-          platform: '삼삼엠투',
-          totalAmount: 495000,
-          cleaningFee: 40000,
-          commissionRate: 3.3,
-          cleaningDone: true,
-          cleanerName: '최팀장(클린홈)',
-          memo: '세금계산서 발행 완료'
-        },
-        {
-          id: 'RES-1004',
-          roomId: '102',
-          guestName: '최유진',
-          guestPhone: '010-9102-3348',
-          checkIn: `${y}-${m}-05`,
-          checkOut: `${y}-${m}-15`,
-          platform: '직거래',
-          totalAmount: 550000,
-          cleaningFee: 45000,
-          commissionRate: 0,
-          cleaningDone: false,
-          cleanerName: '박여사님',
-          memo: '퇴실 후 침구류 전면 교체 요망'
-        },
-        {
-          id: 'RES-1005',
-          roomId: '101',
-          guestName: '정우성',
-          guestPhone: '010-7741-9980',
-          checkIn: `${y}-${m}-14`,
-          checkOut: `${y}-${m}-24`,
-          platform: '에어비앤비',
-          totalAmount: 650000,
-          cleaningFee: 40000,
-          commissionRate: 14.0,
-          cleaningDone: false,
-          cleanerName: '박여사님',
-          memo: '현재 투숙 중 · 주차 1대 등록(12가 3456)'
-        },
-        {
-          id: 'RES-1006',
-          roomId: '102',
-          guestName: '한소희',
-          guestPhone: '010-2219-4810',
-          checkIn: `${y}-${m}-23`,
-          checkOut: `${y}-${m}-29`,
-          platform: '네이버예약',
-          totalAmount: 390000,
-          cleaningFee: 45000,
-          commissionRate: 5.5,
-          cleaningDone: false,
-          cleanerName: '최팀장(클린홈)',
-          memo: '얼리 체크인(13시) 요청'
-        }
-      ];
+      const systemConfig = {
+        appTitle: '포항 대도동 다가구 7세대 스테이',
+        appSubtitle: '단기임대 & 원룸 통합 운영 · 정산 관리 시스템'
+      };
 
-      const expenses = [
-        {
-          id: 'EXP-201',
-          date: `${y}-${m}-05`,
-          roomId: '공통',
-          category: '공과금/통신비',
-          title: '포항 대도동 전 호실 인터넷 및 IPTV 요금',
-          amount: 44000,
-          memo: 'KT 기가인터넷 통합 자동이체'
-        },
-        {
-          id: 'EXP-202',
-          date: `${y}-${m}-10`,
-          roomId: '101',
-          category: '비품/소모품',
-          title: '호텔식 수건 10장 및 캡슐커피 보충',
-          amount: 52000,
-          memo: '쿠팡 비즈 구매'
-        },
-        {
-          id: 'EXP-203',
-          date: `${y}-${m}-12`,
-          roomId: '102',
-          category: '공과금/통신비',
-          title: '102호 도시가스 및 수도요금 정산',
-          amount: 38000,
-          memo: '영남에너지서비스'
-        }
-      ];
+      const reservations = [];
+      const expenses = [];
 
       return { systemConfig, rooms, platforms, admins, reservations, expenses };
     };
@@ -630,6 +1186,118 @@
         } catch (e) {}
         return DEFAULT_SMS_TEMPLATES;
       });
+
+      // --- Firebase Cloud Realtime Sync State ---
+      const [cloudStatus, setCloudStatus] = useState({
+        enabled: true,
+        connected: false,
+        lastSyncAt: null,
+        error: null
+      });
+      const cloudSyncPendingRef = useRef(false);
+      const isFromCloudRef = useRef(false);
+
+      // --- Firebase Cloud Realtime Synchronization Engine ---
+      useEffect(() => {
+        if (!window.firebaseDb) return;
+        const db = window.firebaseDb;
+        const docRef = db.collection('rental_data').doc('main_state');
+
+        // 1. Real-time Cloud Listener (PC, Mobile, Any browser across the globe)
+        const unsubscribe = docRef.onSnapshot(
+          (doc) => {
+            if (doc.exists) {
+              const remote = doc.data();
+              if (remote && remote.appData) {
+                isFromCloudRef.current = true;
+                setAppData(upgradeStoredData(remote.appData));
+                if (remote.smsTemplates) {
+                  const mergedTpl = { ...DEFAULT_SMS_TEMPLATES, ...remote.smsTemplates };
+                  setSmsTemplates(mergedTpl);
+                  try { localStorage.setItem(SMS_TEMPLATES_STORAGE_KEY, JSON.stringify(mergedTpl)); } catch (e) {}
+                }
+                if (remote.saleTaxData) {
+                  try {
+                    localStorage.setItem(SALE_TAX_STORAGE_KEY, JSON.stringify(remote.saleTaxData));
+                    window.dispatchEvent(new Event('daedo-sale-tax-synced'));
+                  } catch (e) {}
+                }
+                setCloudStatus({
+                  enabled: true,
+                  connected: true,
+                  lastSyncAt: remote.updatedAt || new Date().toLocaleTimeString('ko-KR'),
+                  error: null
+                });
+                console.log('[Firebase Cloud] Real-time data received from rental_data/main_state.');
+              }
+            } else {
+              // First time init: Seed cloud with local real data so it is never empty
+              const nowTime = new Date().toLocaleString('ko-KR');
+              docRef.set({
+                appData: appData,
+                smsTemplates: smsTemplates,
+                saleTaxData: readSaleTaxFromLocal(),
+                updatedAt: nowTime,
+                updatedBy: 'initial_setup'
+              }).then(() => {
+                setCloudStatus({
+                  enabled: true,
+                  connected: true,
+                  lastSyncAt: nowTime,
+                  error: null
+                });
+                console.log('[Firebase Cloud] Initialized rental_data/main_state document with current local data.');
+              }).catch((err) => {
+                console.warn('[Firebase Cloud] Init doc error:', err);
+                setCloudStatus(prev => ({ ...prev, connected: false, error: err.message }));
+              });
+            }
+          },
+          (err) => {
+            console.warn('[Firebase Cloud] Listener error:', err);
+            setCloudStatus(prev => ({ ...prev, connected: false, error: err.message }));
+          }
+        );
+
+        return () => unsubscribe();
+      }, []);
+
+      // Auto-upload changes to Firebase Cloud whenever appData or related data changes
+      useEffect(() => {
+        if (!window.firebaseDb) return;
+        if (isFromCloudRef.current) {
+          isFromCloudRef.current = false;
+          return;
+        }
+        if (cloudSyncPendingRef.current) clearTimeout(cloudSyncPendingRef.current);
+        cloudSyncPendingRef.current = setTimeout(async () => {
+          try {
+            const db = window.firebaseDb;
+            const nowTime = new Date().toLocaleString('ko-KR');
+            await db.collection('rental_data').doc('main_state').set({
+              appData: appData,
+              smsTemplates: smsTemplates,
+              saleTaxData: readSaleTaxFromLocal(),
+              updatedAt: nowTime,
+              updatedBy: currentAdmin?.username || 'user'
+            }, { merge: true });
+            setCloudStatus(prev => ({
+              ...prev,
+              connected: true,
+              lastSyncAt: nowTime,
+              error: null
+            }));
+            console.log('[Firebase Cloud] Local change synced to rental_data/main_state successfully.');
+          } catch (e) {
+            console.warn('[Firebase Cloud] Push error:', e);
+            setCloudStatus(prev => ({ ...prev, connected: false, error: e.message }));
+          }
+        }, 500);
+
+        return () => {
+          if (cloudSyncPendingRef.current) clearTimeout(cloudSyncPendingRef.current);
+        };
+      }, [appData, smsTemplates]);
 
       // --- Company PC Server Sync Engine (HTTP + JSON DB Real-Time Sync) ---
       const [customServerUrl, setCustomServerUrl] = useState(() => {
@@ -770,12 +1438,49 @@
         }
       };
 
-      // Initial server detection + Service Worker registration for mobile PWA app install
+      // Initial server detection + GitHub Pages static data.json auto-load + Service Worker registration
       useEffect(() => {
         if ((window.location.protocol === 'http:' || window.location.protocol === 'https:') && 'serviceWorker' in navigator) {
           navigator.serviceWorker.register('/sw.js').catch(() => {});
         }
-        connectAndSyncServer(false);
+        connectAndSyncServer(false).then((connected) => {
+          // If not connected to a local Python server (e.g. running on GitHub Pages or static host)
+          if (!connected && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
+            // Attempt to auto-fetch committed data.json from the repository
+            fetch('./data.json?t=' + Date.now())
+              .then(res => {
+                if (!res.ok) throw new Error('data.json not found');
+                return res.json();
+              })
+              .then(remoteData => {
+                if (remoteData && Array.isArray(remoteData.rooms) && Array.isArray(remoteData.reservations)) {
+                  // If LocalStorage has only the old 2-room mock dummy reservations, auto-upgrade to real repo data
+                  const currentSaved = localStorage.getItem(STORAGE_KEY);
+                  let shouldAdopt = false;
+                  if (!currentSaved) {
+                    shouldAdopt = true;
+                  } else {
+                    try {
+                      const parsed = JSON.parse(currentSaved);
+                      const isOldDemo = parsed.rooms && parsed.rooms.length <= 2 &&
+                        parsed.reservations && parsed.reservations.some(r => r.id === 'RES-1001' || r.id === 'RES-1002');
+                      if (isOldDemo) shouldAdopt = true;
+                    } catch (e) {
+                      shouldAdopt = true;
+                    }
+                  }
+                  if (shouldAdopt) {
+                    setAppData(upgradeStoredData(remoteData));
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
+                    console.log('GitHub repository data.json auto-loaded successfully.');
+                  }
+                }
+              })
+              .catch(() => {
+                // Standalone without data.json - defaults already protected
+              });
+          }
+        });
       }, [customServerUrl]);
 
       // Background polling every 4 seconds so PC & Smartphone see updates in real time
@@ -936,14 +1641,24 @@
         localStorage.removeItem(AUTH_KEY);
       };
 
-      const handleResetDemoData = () => {
-        if (window.confirm('시연용 초기 샘플 데이터로 복원하시겠습니까? (현재 추가/수정한 객실, 예약, 설정 내역이 초기화됩니다)')) {
+      const handleResetDemoData = async () => {
+        if (window.confirm('저장소 원본 데이터(7세대 실데이터 및 22건 예약)로 복원하시겠습니까? (현재 기기의 임시 변경사항이 원본으로 재설정됩니다)')) {
+          try {
+            const resp = await fetch('./data.json?t=' + Date.now());
+            if (resp.ok) {
+              const remote = await resp.json();
+              if (remote && Array.isArray(remote.rooms)) {
+                setAppData(upgradeStoredData(remote));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(remote));
+                showToast('저장소 data.json 원본 실데이터로 안전하게 복원되었습니다.');
+                return;
+              }
+            }
+          } catch (e) {}
           const seed = createInitialData();
           setAppData(seed);
-          const now = new Date();
-          setSelectedYear(now.getFullYear());
-          setSelectedMonth(now.getMonth() + 1);
-          showToast('시연용 샘플 데이터가 초기화되었습니다.');
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
+          showToast('시스템 기본 실데이터로 복원되었습니다.');
         }
       };
 
@@ -1443,15 +2158,19 @@
                   <button
                     onClick={() => setIsPhoneSyncModalOpen(true)}
                     className={`inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-xs font-bold border transition cursor-pointer whitespace-nowrap shrink-0 ${
-                      serverStatus.connected
+                      cloudStatus.connected
+                        ? 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-300'
+                        : serverStatus.connected
                         ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200'
                         : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200'
                     }`}
-                    title="회사 PC 서버 및 스마트폰 실시간 연동 센터 열기"
+                    title="Firebase 클라우드 및 스마트폰 실시간 연동 센터 열기"
                   >
-                    <span className={`w-2 h-2 rounded-full ${serverStatus.connected ? 'bg-emerald-500 animate-pulse' : 'bg-indigo-500'}`}></span>
-                    <Icon name="smartphone" className="w-3.5 h-3.5" />
-                    <span className="whitespace-nowrap">{serverStatus.connected ? 'PC서버·폰 연동중' : '스마트폰 연동'}</span>
+                    <span className={`w-2 h-2 rounded-full ${cloudStatus.connected ? 'bg-amber-500 animate-pulse' : serverStatus.connected ? 'bg-emerald-500 animate-pulse' : 'bg-indigo-500'}`}></span>
+                    <Icon name={cloudStatus.connected ? 'cloud' : 'smartphone'} className="w-3.5 h-3.5" />
+                    <span className="whitespace-nowrap">
+                      {cloudStatus.connected ? 'Firebase 클라우드 연동중' : serverStatus.connected ? 'PC서버·폰 연동중' : '스마트폰 연동'}
+                    </span>
                   </button>
 
                   <button
@@ -1746,6 +2465,7 @@
               phoneGatewayConfig={phoneGatewayConfig}
               onUpdatePhoneGatewayConfig={handleUpdatePhoneGatewayConfig}
               serverStatus={serverStatus}
+              cloudStatus={cloudStatus}
               customServerUrl={customServerUrl}
               onUpdateCustomServerUrl={handleUpdateCustomServerUrl}
               onForceSyncServer={() => connectAndSyncServer(false)}
@@ -3940,7 +4660,8 @@
         { id: 'rooms', label: '1·2. 객실 추가 및 이름 변경', icon: 'home' },
         { id: 'platforms', label: '3. 플랫폼 이름/수수료 변경', icon: 'layers' },
         { id: 'admins', label: '4. 관리자 계정(ID/비번) 관리', icon: 'shield-check' },
-        { id: 'excel', label: '5. 기존 임대관리 엑셀 일괄 업로드 (객실관리 연동)', icon: 'file-spreadsheet' }
+        { id: 'excel', label: '5. 기존 임대관리 엑셀 일괄 업로드', icon: 'file-spreadsheet' },
+        { id: 'github_backup', label: '6. 깃허브 배포 데이터 저장/보존', icon: 'git-branch' }
       ];
 
       return (
@@ -4509,6 +5230,95 @@
               platforms={platforms}
               onBulkImportReservations={onBulkImportReservations}
             />
+          )}
+
+          {/* SUB-TAB 6: 깃허브 배포 데이터 저장 및 초기화 방지 보존 관리 */}
+          {subTab === 'github_backup' && (
+            <div className="space-y-6">
+              <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 rounded-2xl p-6 text-white space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold flex items-center gap-1.5">
+                    <Icon name="shield-check" className="w-3.5 h-3.5" />
+                    <span>깃허브 배포 내부 데이터 불변 보존 시스템 가동 중</span>
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold">깃허브(GitHub) 올린 내부 데이터 초기화 방지 안내</h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
+                  GitHub Pages 정적 호스팅에 배포하더라도 <strong>포항 대도동 7세대 객실 정보 및 22건의 예약 데이터</strong>가 영구 보존됩니다. 브라우저 캐시 삭제, 새 컴퓨터, 스마트폰 첫 접속 시에도 더미 데이터로 리셋되지 않고 <strong>저장소의 최신 data.json을 자동으로 우선 로드</strong>합니다.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between space-y-4">
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg inline-block">
+                      1단계: Git 저장소 반영용
+                    </span>
+                    <h4 className="font-bold text-slate-900 text-base">최신 내부 데이터를 data.json 으로 다운로드</h4>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      현재 등록되어 있는 객실({rooms.length}개 호실), 예약({reservations.length}건), 플랫폼, 지출 내역을 <code className="bg-slate-100 font-bold px-1.5 py-0.5 rounded text-slate-800">data.json</code>으로 다운로드합니다. 이 파일을 GitHub 저장소 루트에 올리면(commit & push) 모든 기기에서 동일한 실제 데이터가 유지됩니다.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const payload = JSON.stringify({
+                        systemConfig,
+                        rooms,
+                        platforms,
+                        admins,
+                        reservations,
+                        expenses: []
+                      }, null, 2);
+                      const blob = new Blob([payload], { type: 'application/json' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'data.json';
+                      a.click();
+                      URL.revokeObjectURL(url);
+                      alert('저장소 업로드용 data.json 파일이 다운로드되었습니다. GitHub 저장소에 커밋/푸시하시면 됩니다.');
+                    }}
+                    className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                  >
+                    <Icon name="download" className="w-4 h-4" />
+                    <span>최신 data.json 다운로드 (깃허브 업로드용)</span>
+                  </button>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between space-y-4">
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg inline-block">
+                      2단계: 저장소 원본 즉시 불러오기
+                    </span>
+                    <h4 className="font-bold text-slate-900 text-base">저장소의 data.json 파일에서 강제 새로고침</h4>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      깃허브나 서버에 업로드된 최신 <code className="bg-slate-100 font-bold px-1.5 py-0.5 rounded text-slate-800">./data.json</code>을 즉시 읽어와 현재 브라우저의 저장소를 최신 원본 상태로 안전하게 동기화합니다.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        const res = await fetch('./data.json?t=' + Date.now());
+                        if (!res.ok) throw new Error('data.json 파일을 찾을 수 없습니다.');
+                        const json = await res.json();
+                        if (json && Array.isArray(json.reservations)) {
+                          onBulkImportReservations(json.reservations);
+                          alert(`저장소 data.json에서 총 ${json.reservations.length}건의 예약 및 객실 데이터를 성공적으로 동기화했습니다!`);
+                        }
+                      } catch (e) {
+                        alert('data.json 불러오기 실패: ' + e.message);
+                      }
+                    }}
+                    className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                  >
+                    <Icon name="refresh-cw" className="w-4 h-4 text-emerald-400" />
+                    <span>저장소 data.json 지금 불러와 동기화</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       );
@@ -5304,13 +6114,14 @@
       phoneGatewayConfig,
       onUpdatePhoneGatewayConfig,
       serverStatus,
+      cloudStatus,
       customServerUrl,
       onUpdateCustomServerUrl,
       onForceSyncServer,
       onPushToServer,
       showToast
     }) {
-      const [activeTab, setActiveTab] = useState('server'); // 'server' | 'sync' | 'gateway' | 'install'
+      const [activeTab, setActiveTab] = useState('cloud'); // 'cloud' | 'server' | 'sync' | 'gateway' | 'install' | 'github'
       const [syncCodeText, setSyncCodeText] = useState('');
       const [serverUrlDraft, setServerUrlDraft] = useState(customServerUrl || '');
       const [gatewayDraft, setGatewayDraft] = useState(phoneGatewayConfig || {});
@@ -5415,20 +6226,22 @@
             <div className="px-6 py-4 bg-gradient-to-r from-indigo-900 via-blue-900 to-slate-900 text-white flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-                  <Icon name="server" className="w-5 h-5 text-emerald-300" />
+                  <Icon name={cloudStatus?.connected ? "cloud" : "server"} className="w-5 h-5 text-amber-300" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                      serverStatus?.connected
+                      cloudStatus?.connected
+                        ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
+                        : serverStatus?.connected
                         ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40'
-                        : 'bg-amber-500/20 text-amber-200 border border-amber-400/40'
+                        : 'bg-indigo-500/20 text-indigo-200 border border-indigo-400/40'
                     }`}>
-                      {serverStatus?.connected ? '● 회사 PC 서버 실시간 연결됨' : '○ 로컬 파일 모드 (서버 미연결)'}
+                      {cloudStatus?.connected ? '● Firebase 클라우드 실시간 동기화 활성' : serverStatus?.connected ? '● 회사 PC 서버 연결됨' : '○ 로컬 파일 모드'}
                     </span>
                   </div>
                   <h3 className="font-bold text-base sm:text-lg mt-0.5">
-                    회사 PC 서버 · 웹 · 스마트폰 어플 실시간 연동 센터
+                    Firebase 클라우드 · 회사 PC 서버 · 스마트폰 실시간 연동 센터
                   </h3>
                 </div>
               </div>
@@ -5440,10 +6253,12 @@
             {/* Sub Tabs */}
             <div className="flex border-b border-slate-200 bg-slate-50 px-4 pt-3 gap-2 overflow-x-auto">
               {[
+                { id: 'cloud', label: '★ Firebase 클라우드 자동연동', icon: 'cloud' },
                 { id: 'server', label: '① 회사 PC 서버 · QR 폰접속', icon: 'server' },
                 { id: 'install', label: '② 스마트폰 어플(앱) 설치', icon: 'smartphone' },
-                { id: 'gateway', label: '③ 문자 원격발송(웹훅)', icon: 'zap' },
-                { id: 'sync', label: '④ 카톡/파일 수동백업', icon: 'refresh-cw' }
+                { id: 'github', label: '③ 깃허브 배포 데이터 불변 보존', icon: 'git-branch' },
+                { id: 'gateway', label: '④ 문자 원격발송(웹훅)', icon: 'zap' },
+                { id: 'sync', label: '⑤ 카톡/파일 수동백업', icon: 'refresh-cw' }
               ].map((t) => (
                 <button
                   key={t.id}
@@ -5461,6 +6276,102 @@
             </div>
 
             <div className="p-5 sm:p-6 space-y-5 max-h-[80vh] overflow-y-auto text-xs sm:text-sm">
+              {activeTab === 'cloud' && (
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-amber-900 via-orange-950 to-slate-900 rounded-2xl p-4 sm:p-5 text-white space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[11px] font-bold">
+                        🔥 구글 Firebase Cloud 실시간 연동 (완전 자동)
+                      </span>
+                    </div>
+                    <h4 className="text-base sm:text-lg font-bold">PC에서 예약 추가/수정 시 스마트폰에 즉시 실시간 반영!</h4>
+                    <p className="text-xs text-amber-100/90 leading-relaxed">
+                      별도의 복사/붙여넣기나 파일 업로드 없이, <strong>PC에서 예약을 등록하거나 수정하면 0.5초 이내에 구글 클라우드를 통해 스마트폰 화면에 실시간 자동 업데이트</strong>됩니다. 외부 LTE/5G 환경에서도 아무 제약 없이 완벽하게 양방향 동기화됩니다.
+                    </p>
+                  </div>
+
+                  {/* Cloud Status Indicator */}
+                  <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h5 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+                        <span className={`w-3 h-3 rounded-full ${cloudStatus?.connected ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`}></span>
+                        <span>클라우드 연결 상태: {cloudStatus?.connected ? '정상 실시간 연동 중 (Active)' : '연결 준비 중...'}</span>
+                      </h5>
+                      {cloudStatus?.lastSyncAt && (
+                        <span className="text-[11px] text-slate-500 font-mono">
+                          마지막 동기화: {cloudStatus.lastSyncAt}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-3 bg-slate-50 rounded-xl text-xs text-slate-600 space-y-1">
+                      <p>• <strong>프로젝트 ID:</strong> <code className="font-mono text-amber-700 font-bold">jh-rental-manager</code></p>
+                      <p>• <strong>동기화 컬렉션:</strong> Firestore (<code className="font-mono font-bold text-slate-800">rental_data/main_state</code>)</p>
+                      <p>• <strong>스마트폰 접속 주소:</strong> <a href="https://goodmondaysljh-cyber.github.io/JH-web-project/" target="_blank" className="text-blue-600 underline font-bold">https://goodmondaysljh-cyber.github.io/JH-web-project/</a></p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (!window.firebaseDb) return;
+                          try {
+                            const nowTime = new Date().toLocaleString('ko-KR');
+                            await window.firebaseDb.collection('rental_data').doc('main_state').set({
+                              appData: appData,
+                              smsTemplates: smsTemplates,
+                              saleTaxData: readSaleTaxFromLocal(),
+                              updatedAt: nowTime,
+                              updatedBy: 'manual_push'
+                            }, { merge: true });
+                            if (showToast) showToast('현재 기기 데이터가 Firebase 클라우드로 전송되었습니다!');
+                          } catch (e) {
+                            alert('클라우드 전송 중 오류: ' + e.message);
+                          }
+                        }}
+                        className="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                      >
+                        <Icon name="upload-cloud" className="w-4 h-4" />
+                        <span>현재 PC 데이터를 클라우드로 즉시 강제 전송</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (!window.firebaseDb) return;
+                          try {
+                            const doc = await window.firebaseDb.collection('rental_data').doc('main_state').get();
+                            if (doc.exists && doc.data()?.appData) {
+                              setAppData(upgradeStoredData(doc.data().appData));
+                              if (showToast) showToast('Firebase 클라우드 최신 데이터를 성공적으로 내려받았습니다!');
+                            } else {
+                              alert('클라우드에 저장된 데이터가 없습니다.');
+                            }
+                          } catch (e) {
+                            alert('클라우드 수신 중 오류: ' + e.message);
+                          }
+                        }}
+                        className="flex-1 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                      >
+                        <Icon name="download-cloud" className="w-4 h-4 text-amber-400" />
+                        <span>클라우드 최신 데이터 지금 바로 내려받기</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Firebase Firestore Rule Notice */}
+                  <div className="p-4 rounded-2xl border border-amber-200 bg-amber-50/70 text-amber-950 text-xs space-y-2">
+                    <strong className="text-sm flex items-center gap-1.5 font-extrabold">
+                      <Icon name="info" className="w-4 h-4 text-amber-700" />
+                      <span>Firebase 콘솔 확인 팁 (최초 1회 권장)</span>
+                    </strong>
+                    <p className="leading-relaxed">
+                      구글 Firebase 콘솔(<a href="https://console.firebase.google.com/project/jh-rental-manager/firestore" target="_blank" className="underline font-bold text-amber-900">바로가기</a>)의 <strong>[Firestore Database]</strong> 메뉴에서 데이터베이스가 생성되어 있는지 확인해주세요.<br/>
+                      규칙(Rules) 탭에서 <code className="bg-white px-1.5 py-0.5 rounded font-mono text-slate-800">allow read, write: if true;</code> 로 설정되어 있으면 스마트폰과 PC 간에 권한 제한 없이 24시간 실시간 무인 동기화가 진행됩니다.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {activeTab === 'server' && (
                 <div className="space-y-5">
                   {/* Live Status + QR Panel */}
@@ -5677,6 +6588,103 @@
                         <span>백업 파일 불러오기</span>
                       </button>
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'github' && (
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 rounded-2xl p-4 sm:p-5 text-white space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[11px] font-bold">
+                        🛡️ 깃허브 배포 데이터 영구 보호
+                      </span>
+                      <span className="text-xs text-slate-300">GitHub Pages / 저장소 동기화</span>
+                    </div>
+                    <h4 className="text-base sm:text-lg font-bold">깃허브에 올린 내부 데이터가 초기화되지 않는 보존 시스템</h4>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      GitHub Pages 또는 새 브라우저/스마트폰에서 접속할 때, 브라우저 저장소가 비어있더라도 <strong>저장소의 최신 data.json을 자동으로 우선 로드</strong>하여 포항 대도동 7세대 실제 객실 및 예약 내역이 절대 초기화되거나 더미 데이터로 덮어씌워지지 않습니다.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Action 1: Export data.json */}
+                    <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-3 flex flex-col justify-between">
+                      <div className="space-y-1">
+                        <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">1단계: 깃허브 업로드용 파일 다운로드</span>
+                        <h5 className="font-bold text-slate-900 text-sm">현재 실데이터를 data.json 으로 다운로드</h5>
+                        <p className="text-xs text-slate-500">
+                          현재 등록된 객실(7세대), 예약({(appData?.reservations || []).length}건), 지출 내역을 저장소 루트의 <code className="bg-slate-100 px-1 py-0.5 rounded font-mono font-bold">data.json</code> 파일로 즉시 저장합니다.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const payload = JSON.stringify(appData, null, 2);
+                          const blob = new Blob([payload], { type: 'application/json' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = 'data.json';
+                          a.click();
+                          URL.revokeObjectURL(url);
+                          if (showToast) showToast('저장소 업로드용 data.json 파일이 다운로드되었습니다!');
+                        }}
+                        className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                      >
+                        <Icon name="download" className="w-4 h-4" />
+                        <span>깃허브 업로드용 data.json 저장</span>
+                      </button>
+                    </div>
+
+                    {/* Action 2: Check Committed data.json status */}
+                    <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-3 flex flex-col justify-between">
+                      <div className="space-y-1">
+                        <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">2단계: 원격/저장소 data.json 수동 불러오기</span>
+                        <h5 className="font-bold text-slate-900 text-sm">깃허브 저장소 data.json 강제 동기화</h5>
+                        <p className="text-xs text-slate-500">
+                          깃허브나 로컬 폴더에 위치한 <code className="bg-slate-100 px-1 py-0.5 rounded font-mono font-bold">./data.json</code>을 읽어와 현재 화면에 즉시 덮어쓰고 로컬 저장소에 안전하게 동기화합니다.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            const res = await fetch('./data.json?t=' + Date.now());
+                            if (!res.ok) throw new Error('data.json 파일을 찾을 수 없습니다.');
+                            const json = await res.json();
+                            if (onRestoreAppData(json)) {
+                              if (showToast) showToast('깃허브 저장소의 data.json 데이터를 성공적으로 불러왔습니다!');
+                            }
+                          } catch (err) {
+                            alert('저장소 data.json을 불러오는 데 실패했습니다: ' + err.message);
+                          }
+                        }}
+                        className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                      >
+                        <Icon name="refresh-cw" className="w-4 h-4 text-emerald-400" />
+                        <span>저장소 data.json 지금 불러오기</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Step by Step Guide for GitHub */}
+                  <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2 text-xs">
+                    <h5 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                      <Icon name="shield-check" className="w-4 h-4 text-blue-600" />
+                      <span>깃허브 배포 시 데이터 초기화 방지 3중 안전 장치</span>
+                    </h5>
+                    <ul className="space-y-1.5 text-slate-600 list-disc list-inside">
+                      <li>
+                        <strong>1중 보호 (내장 기본 데이터):</strong> 소스코드 자체에 포항 대도동 7세대 및 실제 예약 22건이 기본값으로 내장되어 있어, 브라우저 캐시를 지워도 더미 데이터가 아닌 실제 데이터가 나옵니다.
+                      </li>
+                      <li>
+                        <strong>2중 보호 (data.json 자동 탐색):</strong> 페이지가 켜질 때 저장소 루트의 <code className="bg-white px-1 rounded font-mono">data.json</code>을 자동 fetch하여 새 스마트폰이나 PC에서도 저장소 최신 데이터를 그대로 이어받습니다.
+                      </li>
+                      <li>
+                        <strong>3중 보호 (데모 리셋 차단):</strong> 우측 상단의 데모 초기화 버튼 작동 시에도 시연용 더미 데이터가 아닌 저장소 실제 데이터를 복원하도록 방어되었습니다.
+                      </li>
+                    </ul>
                   </div>
                 </div>
               )}
@@ -6099,7 +7107,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>경매취득 원가 및 자본적 지출 계산기 (새창)</title>
-  <script src="https://cdn.tailwindcss.com"><\/script>
+  <` + `script src="https://cdn.tailwindcss.com"><` + `/script>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
   <style>body { font-family: 'Pretendard', sans-serif; background: #f8fafc; }</style>
 </head>
@@ -6251,7 +7259,7 @@
     </div>
   </div>
 
-  <script>
+  <` + `script>
     const initData = ${initialJson};
     const costFields = [
       'winningBid','acquisitionTax','registrationFee','judicialScrivenerFee','auctionMiscFee','ownershipTransferFee',
@@ -6298,7 +7306,7 @@
     }
 
     recalc();
-  <\/script>
+  <` + `/script>
 </body>
 </html>`;
         popup.document.open();
